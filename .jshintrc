@@ -1,0 +1,20 @@
+{
+    // Enforcing options
+    "bitwise": true,
+    "curly": true,
+    "eqeqeq": true,
+    "esversion": 11,
+    "evil": true,
+    "globals": { /* false = read-only, true = read-write */
+        "console": false,
+        "require": false,
+        "module": false,
+        "__dirname": false
+    },
+    // "globalstrict": true,
+    "latedef": "nofunc",
+    "strict": true,
+    "undef": true,
+    "unused": true,
+    "varstmt": true
+}
