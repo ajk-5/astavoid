@@ -1,0 +1,21 @@
+{
+  "name": "astavoid-v1",
+  "version": "1.0.0",
+  "description": "![Schéma de navigation](./schema_nav_demo_pi.png)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajk-5/astavoid.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ajk-5/astavoid/issues"
+  },
+  "homepage": "https://github.com/ajk-5/astavoid#readme"
+}

@@ -3,25 +3,29 @@
 "use strict";
 
 const fs = require("fs");
-const nunjucks = require("nunjucks");;
+const nunjucks = require("nunjucks");
 
-const trait = function (req, res, query) {
+// Configure Nunjucks
+nunjucks.configure('public', {
+    autoescape: true,
+    express: null // We'll render manually, not using Express's built-in methods
+});
 
-	let marqueurs;
-	let page;
+const trait = function (req, res) {
+    let page;
 
-	// AFFICHAGE DE LA PAGE D'ACCUEIL
+    // AFFICHAGE DE LA PAGE D'ACCUEIL
+    page = fs.readFileSync('./public/pageConnexion.html', 'utf-8');
 
-	page = fs.readFileSync('./public/pageConnexion.html', 'utf-8');
+    const marqueurs = {
+        erreur: "",
+        pseudo: ""
+    };
+    
+    page = nunjucks.renderString(page, marqueurs);
 
-	marqueurs = {};
-	marqueurs.erreur = "";
-	marqueurs.pseudo = "";
-	page = nunjucks.renderString(page, marqueurs);
-
-	res.writeHead(200, { 'Content-Type': 'text/html' });
-	res.write(page);
-	res.end();
+    // Using Express's response methods
+    res.status(200).send(page);
 };
 
 module.exports = trait;

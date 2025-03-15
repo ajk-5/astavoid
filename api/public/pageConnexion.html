@@ -3,21 +3,21 @@
     <head>
         <title>Accueil</title>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initail-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="./styles/pageInscription.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/styles/pageInscription.css">
     </head>
 <body>
     <h2>Astavoid</h2>
-    <div class="mon_compte"  >
-    <form  action="/req_identifier" method="GET">
-    <input size="25px" type="text" placeholder="login"  name="pseudo" value="" class="too">
-    <br/>
-    <input type="password" placeholder="mot de passe" name="password" value="" class ="too">
-
-    <br/>
-    <input type="submit" name="action" value="Se connecter" class="too">
-    </form>
-      <span>Vous n'avez pas un compte ? <a href="../public/pageInscription.html"> creer un compte </a>  </span>
+    <div class="mon_compte">
+        <form action="/req_identifier" method="POST">
+            <input size="25px" type="text" placeholder="login" name="pseudo" value="{{ pseudo }}" class="too">
+            <br/>
+            <input type="password" placeholder="mot de passe" name="password" value="" class="too">
+            <br/>
+            <input type="submit" name="action" value="Se connecter" class="too">
+            <div class="error-message">{{ erreur }}</div>
+        </form>
+        <span>Vous n'avez pas un compte ? <a href="/req_afficher_formulaire_inscription"> creer un compte </a></span>
     </div>
 </body>
 </html>

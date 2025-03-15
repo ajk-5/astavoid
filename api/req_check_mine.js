@@ -1,6 +1,12 @@
 const fs = require("fs");
 const nunjucks = require("nunjucks");
 
+// Configure Nunjucks
+nunjucks.configure('public', {
+    autoescape: true,
+    express: null
+});
+
 // Utility function to parse boolean from string
 const parseBool = (val) => val === 'true';
 
@@ -61,14 +67,16 @@ const checkMine = (x, y, grille) => {
 };
 
 // Main request handler
-const trait = (req, res, query) => {
+const trait = (req, res) => {
     try {
+        // Get query parameters from req.query in Express
+        const query = req.query;
+        
         // Validate coordinates
         const x = Number(query.x);
         const y = Number(query.y);
         if (isNaN(x) || isNaN(y)) {
-            res.status(400).send("Invalid coordinates");
-            return;
+            return res.status(400).send("Invalid coordinates");
         }
 
         // Load game state
@@ -77,8 +85,7 @@ const trait = (req, res, query) => {
         
         // Validate board boundaries
         if (x >= grille.size || y >= grille.size || x < 0 || y < 0) {
-            res.status(400).send("Coordinates out of bounds");
-            return;
+            return res.status(400).send("Coordinates out of bounds");
         }
 
         // Load appropriate page
@@ -127,26 +134,13 @@ const trait = (req, res, query) => {
         page = nunjucks.renderString(page, marqueurs);
         fs.writeFileSync('grille.json', JSON.stringify(grille), 'utf-8');
 
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end(page);
+        // Using Express's response methods
+        return res.status(200).send(page);
 
     } catch (error) {
         console.error('Error in trait:', error);
-        res.status(500).send(`Server error: ${error.message}`);
+        return res.status(500).send(`Server error: ${error.message}`);
     }
 };
-
-// Example initial grille structure (for reference)
-/*
-{
-    size: 10,
-    minesCount: 10,
-    board: [[]], // 2D array with 'm' for mines, numbers, or ''
-    tileClicked: [[]], // 2D boolean array
-    numClickedTiles: 0,
-    gameOver: false,
-    rocketEnabled: false
-}
-*/
 
 module.exports = trait;
