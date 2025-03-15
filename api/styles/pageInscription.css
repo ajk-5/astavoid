@@ -1,0 +1,86 @@
+body {
+	font-family: sans-serif;
+	font-size: 70px;
+	background-color: black;
+	color: #fbf271;
+}
+
+body {
+	background-image: url("SPACE.jpg");
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.container {
+	max-width: 400px;
+	margin: 0 auto;
+	padding: 100px; 
+	background-color: #15202b;
+	border: 1px solid #1f2937;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+h2 {
+	text-align: center;
+	margin-bottom: 200px;
+	color: #ccd6f6;
+}
+
+.form-group {
+	margin-bottom: 20px;
+	margin: auto;
+}
+.mon_compte{
+	margin-left:25%;
+
+}
+label {
+	display: block;
+	margin-bottom: 5px;
+	color: #ccd6f6;
+}
+
+input[type="text"],
+input[type="password"] {
+	width: 30%;
+	padding: 10px;
+	font-size: 20px;
+	border: 1px solid #1f2937;
+	border-radius: 8px;
+	background-color: #263544;
+	color: #ccd6f6;
+}
+
+input[type="submit"] {
+	align-items: center;
+	width: auto;
+	padding: 20px; 
+	font-size: 20px;
+	background-color: #1f8ce6;
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+}
+input[type="submit"].create-account-btn {
+	padding: 25px; 
+	text-align: center;	
+	color:lightblue;
+}
+
+.to{
+	margin-left:25%;
+
+}
+
+.too{
+	margin-left:20%;
+}
+
+span{
+	font-size:25px;
+	margin-left:15%;
+}
+

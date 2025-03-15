@@ -1,0 +1,80 @@
+body {
+    font-family: 'Wide Latin', 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', Verdana, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    align-items: center;
+}
+body {
+    background-image: url("../assets/SPACE.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    }
+
+#board {
+    width: 499px;
+    height: 499px;
+    border: 10px solid rgb(28, 34, 113);
+    background-color: rgba(52, 168, 210, 0);
+    align-items: center;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#board a {
+    width: 48px;
+    height: 48px;
+    border: 1.09px solid rgba(21, 21, 107, 0.858);
+
+    /* text */
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tile-clicked {
+    background-color: rgba(169, 169, 169, 0.062);
+}
+
+.x1 {
+    color: rgb(236, 230, 56);
+}
+
+.x2 {
+    color: rgb(67, 232, 100);
+}
+
+.x3 {
+    color: red;
+}
+
+.x4 {
+    color: rgb(77, 173, 193);
+}
+
+.x5 {
+    color: brown;
+}
+
+.x6 {
+    color: teal;
+}
+
+.x7 {
+    color: black;
+}
+
+.x8 {
+    color: gray;
+}
+
+#flag-button {
+    width: 100px;
+    height: 50px;
+    font-size: 30px;
+    background-color: lightgray;
+    border: none;
+    align-items: center;
+}

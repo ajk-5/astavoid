@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASTAVOID</title>
+    <link rel="stylesheet" href="./styles/astavoid10x10.css">
+    <style>
+        body {
+            font-family: "asteroids-font", sans-serif;
+            font-weight: bold;
+            text-align: center;
+            color: gold;
+            background-image: url("SPACE.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        @font-face {
+            font-family: "asteroids-font";
+            src: url("./asteroids-font/Asteroidspersonalus.otf");
+        }
+
+        h1 { 
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        h2 {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(52, 168, 210, 0.3);
+            padding: 5px 10px;
+        }
+
+        #board {
+            --size: 10; /* Default size, overridden by JS */
+            width: 800px;
+            height: 800px;
+            border: 10px solid rgb(28, 34, 113);
+            background-color: grey;
+            margin: 100px auto 20px;
+            display: grid;
+            grid-template-columns: repeat(var(--size), 1fr);
+            grid-template-rows: repeat(var(--size), 1fr);
+            gap: 0;
+            box-sizing: border-box;
+        }
+
+        #board a, #board img {
+            width: 100%;
+            height: 100%;
+            border: 1.09px solid rgba(21, 21, 107, 0.858);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            background-color: purple;
+            text-decoration: none;
+            color: gold;
+            aspect-ratio: 1/1;
+        }
+
+        #board img {
+            background-color: white;
+            object-fit: cover;
+        }
+
+        /* Style for empty clicked tiles */
+        #board a.tile-clicked.numOfMines0 {
+            background-color: #aaaaaa !important;
+            color: transparent !important;
+        }
+
+        /* Styles for number tiles */
+        #board a.tile-clicked {
+            background-color: #dddddd;
+        }
+        
+        /* Colors for different mine numbers - more specific selectors */
+        #board a.tile-clicked.numOfMines1 { color: rgb(236, 230, 56) !important; }
+        #board a.tile-clicked.numOfMines2 { color: rgb(67, 232, 100) !important; }
+        #board a.tile-clicked.numOfMines3 { color: red !important; }
+        #board a.tile-clicked.numOfMines4 { color: rgb(77, 173, 193) !important; }
+        #board a.tile-clicked.numOfMines5 { color: brown !important; }
+        #board a.tile-clicked.numOfMines6 { color: teal !important; }
+        #board a.tile-clicked.numOfMines7 { color: black !important; }
+        #board a.tile-clicked.numOfMines8 { color: gray !important; }
+
+        /* Buttons container for left corner */
+        .buttons-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        #quitter {
+            font-size: large;
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+
+        #rocket {
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+        #rocket img {
+            display: block;
+        }
+        
+        /* New style for rocket flags */
+        .rocket-flag {
+            background-color: purple !important;
+            background-image: url('./assets/ajk.png');
+            background-size: contain !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+        }
+        
+        /* Instructions panel */
+        #instructions {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: gold;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            max-width: 600px;
+            text-align: center;
+            line-height: 1.5;
+            z-index: 100;
+            border: 2px solid rgba(52, 168, 210, 0.6);
+        }
+        
+        #rockets-count {
+            font-weight: bold;
+        }
+        
+        .control-instruction {
+            display: inline-block;
+            margin: 0 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1><img src="./assets/LOGO_ASTAVOID.png" height="60px" width="280px" alt="ASTAVOID"></h1>
+    <h2>MINES: <span id="mines-count">{{minesCount}}</span><br>
+        TILES LEFT: <span id="mines-left">{{remainingTiles}}</span><br>
+        ROCKETS: <span id="rockets-count">{{minesCount}}</span></h2>
+
+    <div class="game-board" id="board">
+        {% for y in range(0, size) %}
+            {% for x in range(0, size) %}
+                {% if not isTileClicked[y][x] %}
+                    <a href="/req_check_mine?x={{x}}&y={{y}}" id="{{x}}x{{y}}"></a>
+                {% else %}
+                    {% if board[y][x] == 'm' %}
+                        <img src="./assets/asteroid.png" id="{{x}}x{{y}}">
+                    {% else %}
+                        <a href="javascript:void(0)" id="{{x}}x{{y}}"
+                           class="tile-clicked numOfMines{{board[y][x]}}">{{board[y][x]}}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+
+        {% if gameOver %}
+            <audio id="rocket-audio" src="./assets/boom.mp3" preload="auto" autoplay></audio>
+            <script>
+                function lostGame() {
+                    window.location.href = "./public/pagePerdu.html";
+                }
+                setTimeout(lostGame, 3000);
+            </script>
+        {% endif %}
+    </div>
+
+    <div class="buttons-container">
+        <button id="rocket">
+            {% if not isRocketEnabled %}
+                <a href="/req_rocketEnabled?rocketEnabled=true">
+                    <img src="./assets/ajk.png" height="50px" width="100px" alt="Rocket">
+                </a>
+            {% else %}
+                <a href="/req_rocketEnabled?rocketEnabled=false">
+                    <img src="./assets/ajk.png" height="50px" width="100px" alt="Rocket">
+                </a>
+            {% endif %}
+        </button>
+        <button id="quitter">
+            <a href="./"><b>I QUIT</b></a>
+        </button>
+    </div>
+    
+    <div id="instructions">
+        <div class="control-instruction"><b>Left-click</b>: Reveal tiles</div>
+        <div class="control-instruction"><b>Right-click</b>: Place/remove rocket markers on suspected asteroids</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Board size setup
+            const board = document.getElementById('board');
+            const gridSize = Number('{{size}}');
+            if (gridSize >= 6 && gridSize <= 1000) {
+                board.style.setProperty('--size', gridSize);
+            } else {
+                console.error('Grid size must be between 6 and 1000');
+                board.style.setProperty('--size', 10);
+            }
+            
+            // Apply empty tile styling and ensure color classes are applied
+            const clickedTiles = document.querySelectorAll('#board a.tile-clicked');
+            clickedTiles.forEach(tile => {
+                // Make sure empty tiles (with value 0) don't show the number
+                if (tile.textContent === '0') {
+                    tile.textContent = '';
+                }
+                
+                // Make sure the color is applied based on the content (number of mines)
+                const mineCount = tile.textContent;
+                if (mineCount && mineCount !== '0') {
+                    // Remove any existing numOfMines classes
+                    for (let i = 0; i <= 8; i++) {
+                        tile.classList.remove(`numOfMines${i}`);
+                    }
+                    // Add the correct class
+                    tile.classList.add(`numOfMines${mineCount}`);
+                }
+            });
+            
+            // Rocket flagging functionality
+            let rocketCount = Number(document.getElementById('mines-count').textContent);
+            let rocketsPlaced = 0;
+            document.getElementById('rockets-count').textContent = rocketCount;
+            
+            // Add event listeners to all unrevealed tiles
+            const allTiles = document.querySelectorAll('#board a:not(.tile-clicked)');
+            allTiles.forEach(tile => {
+                // Prevent context menu from appearing on right click
+                tile.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                    
+                    // Toggle rocket flag if not already revealed
+                    if (!tile.classList.contains('tile-clicked')) {
+                        if (tile.classList.contains('rocket-flag')) {
+                            // Remove rocket flag
+                            tile.classList.remove('rocket-flag');
+                            rocketsPlaced--;
+                        } else if (rocketsPlaced < rocketCount) {
+                            // Add rocket flag if we haven't used all rockets
+                            tile.classList.add('rocket-flag');
+                            rocketsPlaced++;
+                        }
+                        // Update rocket count display
+                        document.getElementById('rockets-count').textContent = rocketCount - rocketsPlaced;
+                    }
+                });
+                
+                // Prevent clicking on flagged tiles
+                tile.addEventListener('click', function(e) {
+                    if (tile.classList.contains('rocket-flag')) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

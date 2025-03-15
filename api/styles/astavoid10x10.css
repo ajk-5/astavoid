@@ -1,0 +1,105 @@
+body {
+    font-family: "asteroids-font";
+    src: url("./asteroids-font/Asteroidspersonalus.otf"); /* Note: src should be in @font-face */
+    font-weight: bold;
+    text-align: center;
+    color: gold;
+    background-image: url("SPACE.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Fix font definition */
+@font-face {
+    font-family: "asteroids-font";
+    src: url("./asteroids-font/Asteroidspersonalus.otf");
+}
+
+h1 {
+    position: absolute;
+    background-color: rgba(150, 47, 165, 0.599);
+    top: 10px;
+    left: 10px;
+}
+
+h2 {
+    position: absolute;
+    background-color: rgba(52, 168, 210, 0.3);
+    top: 10px;
+    right: 10px;
+}
+
+#quitter {
+    font-size: large;
+    position: relative;
+    bottom: 1px;
+    left: 1px;
+}
+
+#board {
+    --size: 16; /* Default size - adjust as needed */
+    width: clamp(300px, 800px, 3000px); /* Fixed at 800px but responsive */
+    height: clamp(300px, 800px, 3000px); /* Match width for square */
+    border: 10px solid rgb(28, 34, 113);
+    background-color: grey;
+    margin: 20px auto; /* Added some margin for spacing */
+    display: grid; /* Changed to grid */
+    grid-template-columns: repeat(var(--size), 1fr);
+    grid-template-rows: repeat(var(--size), 1fr);
+    gap: 0; /* No gaps between cells */
+    box-sizing: border-box;
+}
+
+#board a, #board img {
+    width: 100%; /* Fill grid cell */
+    height: 100%; /* Fill grid cell */
+    border: 1.09px solid rgba(21, 21, 107, 0.858);
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1/1; /* Ensure square shape */
+}
+
+#board a {
+    background-color: purple;
+}
+
+#board img {
+    background-color: white;
+}
+
+@keyframes glowing {
+    0% {
+        opacity: 0.5;
+        text-shadow: 0 0 5px gold;
+    }
+    50% {
+        opacity: 1;
+        text-shadow: 0 0 20px gold;
+    }
+    100% {
+        opacity: 0.5;
+        text-shadow: 0 0 5px gold;
+    }
+}
+
+.tile-clicked {
+    background-color: rgba(169, 169, 169, 0.062);
+}
+
+.numOfMines1 { color: rgb(236, 230, 56); }
+.numOfMines2 { color: rgb(67, 232, 100); }
+.numOfMines3 { color: red; }
+.numOfMines4 { color: rgb(77, 173, 193); }
+.numOfMines5 { color: brown; }
+.numOfMines6 { color: teal; }
+.numOfMines7 { color: black; }
+.numOfMines8 { color: gray; }
+
+#rocket {
+    width: 100px;
+    height: 50px;
+    font-size: 30px;
+}

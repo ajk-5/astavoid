@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vous avez gagné</title>
+    <style>
+        html {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url('SPACE.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+        }
+
+        .logo {
+            margin-top: 10px;
+        }
+
+        @keyframes jump {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        h2 {
+            animation: jump 2s infinite;
+            color: gold;
+        }
+
+        button {
+            padding: 30px 60px;
+            font-size: 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 2px 2px 2px;
+            transition: background-color 0.3s ease;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #4C38D8;
+        }
+
+        #replay-button {
+            background-color: #6050DC;
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        #quit-button {
+            background-color: #6050DC;
+            color: rgba(150, 47, 165, 0.589);
+        }
+    </style>
+</head>
+<body>
+    <img class="logo" src="./LOGO_ASTAVOID.png" alt="ASTAVOID">
+    <h2>BRAVO VOUS AVEZ GAGNÉ!</h2>
+    <div>
+        <button id="replay-button">REJOUER</button>
+        <button id="quit-button">QUITTER</button>
+    </div>
+</body>
+</html>
+

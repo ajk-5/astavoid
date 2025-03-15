@@ -1,0 +1,52 @@
+body {	
+	font-family: Arial, sans-serif;
+	display:flex;
+	justify-content: center;
+	align-items:center;
+	height:100vh;
+	text-align: center;
+	}
+body {
+	background-image: url("SPACE.jpg");
+	background-size: cover;
+	background-position:center;
+	background-repeat: no-repeat;
+	}
+	@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-30px);
+    }
+    60% {
+        transform: translateY(-15px);
+    }
+}
+
+h1 {
+	color:white
+	
+}
+.mon {
+	margin-top: 20px;
+}
+button {
+	display:inline-block
+	padding: 30px 60px;
+	font-size: 20px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	box-shadow:2px 2px 2px;
+}
+
+#replay-button {
+  background-color: #6050DC;
+  color: white;
+  margin-right: 250px;
+}
+#quit-button {
+  background-color: #6050DC;
+  color: white;
+}
