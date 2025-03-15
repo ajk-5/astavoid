@@ -1,89 +1,36 @@
-// Site WEB demo PI
+const express = require("express");
+const app = express();
 
-"use strict";
-
-const http = require("http");
-const url = require("url");
-let chemin= require("path");
-let mon_serveur;
-let port;
-
-// DECLARATION DES DIFFERENTS MODULES CORRESPONDANT A CHAQUE ACTION
-
+// Importing route handlers
 const req_commencer = require("./req_commencer.js");
 const req_afficher_formulaire_inscription = require("./req_afficher_formulaire_inscription.js");
 const req_inscrire = require("./req_inscrire.js");
 const req_identifier = require("./req_identifier.js");
-
+const req_check_mine = require("./req_check_mine.js");
+const req_jouer = require("./req_jouer.js");
+const req_rocketEnabled = require("./req_rocketEnabled.js");
+const req_quitter = require("./req_quitter.js");
 const req_statique = require("./req_statique.js");
 const req_erreur = require("./req_erreur.js");
-const req_check_mine=require("./req_check_mine.js");
-const req_jouer=require('./req_jouer.js');
-const req_rocketEnabled=require('./req_rocketEnabled.js')
-const req_quitter=require('./req_quitter.js');
 
+// Routes
+app.get("/", req_commencer);
+app.get("/req_commencer", req_commencer);
+app.get("/req_afficher_formulaire_inscription", req_afficher_formulaire_inscription);
+app.get("/req_inscrire", req_inscrire);
+app.get("/req_identifier", req_identifier);
+app.get("/req_check_mine", req_check_mine);
+app.get("/req_jouer", req_jouer);
+app.get("/req_rocketEnabled", req_rocketEnabled);
+app.get("/req_quitter", req_quitter);
 
-// FONCTION DE CALLBACK APPELLEE POUR CHAQUE REQUETE
+// Handle static files
+app.use(express.static("public"));
 
-const traite_requete = function (req, res) {
+// Catch-all for errors
+app.use((req, res) => {
+    req_erreur(req, res);
+});
 
-	let requete;
-	let pathname;
-	let query;
-
-	console.log("URL reçue : " + req.url);
-	requete = url.parse(req.url, true);
-	pathname = requete.pathname;
-	query = requete.query;
-	
-
-
-	// ROUTEUR
-
-	try {
-		switch (pathname) {
-			case '/':
-			case '/req_commencer':
-				req_commencer(req, res, query);
-				break;
-			case '/req_afficher_formulaire_inscription':
-				req_afficher_formulaire_inscription(req, res, query);
-				break;
-			case '/req_inscrire':
-				req_inscrire(req, res, query);
-				break;
-			case '/req_identifier':
-				req_identifier(req, res, query);
-				break;
-			case '/req_check_mine':
-			    req_check_mine(req, res, query);
-			    break;
-			case  '/req_jouer':
-			    req_jouer(req, res, query);
-			    break;
-		    case '/req_quitter':
-		        req_setRocket(req, res, query);
-		        break;
-		    case '/req_rocketEnabled':
-		        req_rocketEnabled(req, res, query);
-		        break;
-			default:
-				req_statique(req, res, query);
-				break;
-		}
-	} catch (e) {
-		console.log('Erreur : ' + e.stack);
-		console.log('Erreur : ' + e.message);
-		// console.trace();
-		req_erreur(req, res, query);
-	}
-};
-
-// CREATION ET LANCEMENT DU SERVEUR
-
-mon_serveur = http.createServer(traite_requete);
-port = 5001;
-// Pour récupérer le numéro du port depuis la ligne de commande. Exemple : node index.js 5000
-// port = process.argv[2];
-console.log("Serveur en ecoute sur port " + port);
-mon_serveur.listen(port);
+// Export the app as a serverless function
+module.exports = app;
