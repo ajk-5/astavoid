@@ -1,74 +1,73 @@
-// Traitement de "req_inscrire"
-
 "use strict";
 
 const fs = require("fs");
-const nunjucks = require("nunjucks");;
+const path = require("path");
+const nunjucks = require("nunjucks");
 
 const trait = function (req, res, query) {
 
-	let marqueurs;
-	let page;
-	let nouveauMembre;
-	let contenu_fichier;
-	let listeMembres;
-	let i;
-	let trouve;
+    let marqueurs;
+    let page;
+    let nouveauMembre;
+    let contenu_fichier;
+    let listeMembres;
+    let i;
+    let trouve;
 
-	// ON LIT LES COMPTES EXISTANTS
+    // LIT LES COMPTES EXISTANTS
+    const membresPath = path.join(__dirname, "membres.json");
+    contenu_fichier = fs.readFileSync(membresPath, "utf-8");
+    listeMembres = JSON.parse(contenu_fichier);
 
-	contenu_fichier = fs.readFileSync("membres.json", 'utf-8');
-	listeMembres = JSON.parse(contenu_fichier);
+    // VÉRIFIE QUE LE COMPTE N'EXISTE PAS DÉJÀ
+    trouve = false;
+    i = 0;
+    while (i < listeMembres.length && trouve === false) {
+        if (listeMembres[i].pseudo === query.pseudo) {
+            trouve = true;
+        }
+        i++;
+    }
 
-	// ON VERIFIE QUE LE COMPTE N'EXISTE PAS DEJA
+    // SI LE COMPTE N'EXISTE PAS, ON AJOUTE LE NOUVEAU COMPTE
+    if (trouve === false) {
+        nouveauMembre = {
+            pseudo: query.pseudo,
+            password: query.password
+        };
+        listeMembres.push(nouveauMembre);
 
-	trouve = false;
-	i = 0;
-	while (i < listeMembres.length && trouve === false) {
-		if (listeMembres[i].pseudo === query.pseudo) {
-			trouve = true;
-		}
-		i++;
-	}
+        contenu_fichier = JSON.stringify(listeMembres);
+        fs.writeFileSync(membresPath, contenu_fichier, "utf-8");
+    }
 
-	// SI PAS TROUVE, ON AJOUTE LE NOUVEAU COMPTE DANS LA LISTE DES COMPTES
+    // ENVOIE D'UNE PAGE HTML EN FONCTION DU RÉSULTAT
+    if (trouve === true) {
+        // SI LE COMPTE EXISTE DÉJÀ, ON RENVOIE LA PAGE D'INSCRIPTION AVEC UNE ERREUR
+        const pageInscriptionPath = path.join(__dirname, "public", "pageInscription.html");
+        page = fs.readFileSync(pageInscriptionPath, "utf-8");
 
-	if (trouve === false) {
-		nouveauMembre = {};
-		nouveauMembre.pseudo = query.pseudo;
-		nouveauMembre.password = query.password;
-		listeMembres[listeMembres.length] = nouveauMembre;
+        marqueurs = {
+            erreur: "<strong>ERREUR</strong> : ce compte existe déjà",
+            pseudo: query.pseudo
+        };
+        page = nunjucks.renderString(page, marqueurs);
+    } else {
+        // SI LE COMPTE EST CRÉÉ, ON RENVOIE LA PAGE DE CONFIRMATION
+        const pageConfirmationPath = path.join(__dirname, "public", "pageConfirmation.html");
+        page = fs.readFileSync(pageConfirmationPath, "utf-8");
 
-		contenu_fichier = JSON.stringify(listeMembres);
-		fs.writeFileSync("membres.json", contenu_fichier, 'utf-8');
-	}
+        marqueurs = {
+            pseudo: query.pseudo,
+            password: query.password
+        };
+        page = nunjucks.renderString(page, marqueurs);
+    }
 
-	// ON RENVOIT UNE PAGE HTML 
-
-	if (trouve === true) {
-		// SI CREATION PAS OK, ON REAFFICHE PAGE FORMULAIRE AVEC ERREUR
-
-		page = fs.readFileSync('./public/pageInscription.html', 'utf-8');
-
-		marqueurs = {};
-		marqueurs.erreur = "<strong>ERREUR</strong> : ce compte existe déjà";
-		marqueurs.pseudo = query.pseudo;
-		page = nunjucks.renderString(page, marqueurs);
-
-	} else {
-		// SI CREATION OK, ON ENVOIE PAGE DE CONFIRMATION
-
-		page = fs.readFileSync('./public/pageConfirmation.html', 'UTF-8');
-
-		marqueurs = {};
-		marqueurs.pseudo = query.pseudo;
-		marqueurs.password = query.password;
-		page = nunjucks.renderString(page, marqueurs);
-	}
-
-	res.writeHead(200, { 'Content-Type': 'text/html' });
-	res.write(page);
-	res.end();
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.write(page);
+    res.end();
 };
 
 module.exports = trait;
+
