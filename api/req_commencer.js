@@ -6,7 +6,7 @@ const fs = require("fs");
 const nunjucks = require("nunjucks");
 
 // Configure Nunjucks
-nunjucks.configure('public', {
+nunjucks.configure('./public', {
     autoescape: true,
     express: null // We'll render manually, not using Express's built-in methods
 });
