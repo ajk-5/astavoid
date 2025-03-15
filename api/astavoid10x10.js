@@ -68,9 +68,9 @@ function clickTile() {
     let tile = this;
     if (rocketEnabled) {
         if (tile.innerText == "") {
-            tile.innerHTML = '<img src = "./ajk.png" height="50"  width= "50"alt="Image" > ';
+            tile.innerHTML = '<img src = "./assets/ajk.png" height="50"  width= "50"alt="Image" > ';
         }
-        else if (tile.innerHTML = '<img src = "./ajk.png" height="50" width="50" alt="Image" >') {
+        else if (tile.innerHTML = '<img src = "./assets/ajk.png" height="50" width="50" alt="Image" >') {
             tile.innerText = "";
         }
         return;
@@ -98,7 +98,7 @@ function revealMines() {
         for (let y = 0; y < columns; y++) {
             let tile = board[x][y];
             if (minesLocation.includes(tile.id)) {
-                grille.board[y][x] = '<div><img src = "./asteroid.png" height="50" width="50" alt="Image" ></div>'
+                grille.board[y][x] = '<div><img src = "./assets/asteroid.png" height="50" width="50" alt="Image" ></div>'
                 
                              
             }
