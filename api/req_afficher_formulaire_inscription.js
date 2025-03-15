@@ -1,28 +1,32 @@
-// Traitement de "req_afficher_formulaire_inscription"
-
 "use strict";
 
 const fs = require("fs");
-const nunjucks = require("nunjucks");;
+const path = require("path");
+const nunjucks = require("nunjucks");
 
 const trait = function (req, res, query) {
 
-	let marqueurs;
-	let page;
+    let marqueurs;
+    let page;
 
-	// AFFICHAGE DE LA modele_formulaire_inscription
+    // Construction du chemin absolu pour la page d'inscription
+    const pageInscriptionPath = path.join(__dirname, "public", "pageInscription.html");
 
-	page = fs.readFileSync('../public/pageInscription.html', 'utf-8');
+    // Lecture du fichier HTML
+    page = fs.readFileSync(pageInscriptionPath, "utf-8");
 
-	marqueurs = {};
-	marqueurs.erreur = "";
-	marqueurs.pseudo = "";
-	page = nunjucks.renderString(page, marqueurs);
-	
+    // Préparer les marqueurs pour Nunjucks
+    marqueurs = {};
+    marqueurs.erreur = "";
+    marqueurs.pseudo = "";
 
-	res.writeHead(200, { 'Content-Type': 'text/html' });
-	res.write(page);
-	res.end();
+    // Utilisation de Nunjucks pour injecter les marqueurs dans la page
+    page = nunjucks.renderString(page, marqueurs);
+
+    // Envoi de la réponse HTML
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.write(page);
+    res.end();
 };
 
 module.exports = trait;
